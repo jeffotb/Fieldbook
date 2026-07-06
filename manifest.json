@@ -1,0 +1,50 @@
+{
+  "name": "Fieldbook",
+  "short_name": "Fieldbook",
+  "description": "A ledger for the habits you keep.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#141813",
+  "theme_color": "#141813",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%23141813' width='192' height='192'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='100' font-weight='600' fill='%23C99A3B' text-anchor='middle' dominant-baseline='middle'%3EF%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%23141813' width='512' height='512'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='280' font-weight='600' fill='%23C99A3B' text-anchor='middle' dominant-baseline='middle'%3EF%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'%3E%3Crect fill='%23141813' width='540' height='720'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='120' font-weight='600' fill='%23C99A3B' text-anchor='middle' dominant-baseline='middle'%3EFieldbook%3C/text%3E%3C/svg%3E",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["productivity"],
+  "shortcuts": [
+    {
+      "name": "Today's Habits",
+      "short_name": "Today",
+      "description": "Check off today's habits",
+      "url": "/?view=today",
+      "icons": []
+    },
+    {
+      "name": "Calendar View",
+      "short_name": "Calendar",
+      "description": "View your habit calendar",
+      "url": "/?view=calendar",
+      "icons": []
+    }
+  ]
+}
