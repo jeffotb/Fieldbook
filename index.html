@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#141813">
+  <meta name="description" content="Fieldbook: A ledger for the habits you keep.">
+  <title>Fieldbook</title>
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%23141813' width='180' height='180'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='90' font-weight='600' fill='%23C99A3B' text-anchor='middle' dominant-baseline='middle'%3EF%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect fill='%23141813' width='180' height='180'/%3E%3Ctext x='50%25' y='50%25' font-family='serif' font-size='90' font-weight='600' fill='%23C99A3B' text-anchor='middle' dominant-baseline='middle'%3EF%3C/text%3E%3C/svg%3E">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #141813; color: #EDE8DA; }
+    
+    [data-testid="root"] { width: 100%; height: 100%; }
+    
+    /* Utility classes */
+    .w-full { width: 100%; }
+    .h-full { height: 100%; }
+    .min-h-screen { min-height: 100vh; }
+    .max-w-3xl { max-width: 48rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-5 { margin-bottom: 1.25rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mt-1 { margin-top: 0.25rem; }
+    .mt-3 { margin-top: 0.75rem; }
+    .mt-5 { margin-top: 1.25rem; }
+    .mt-10 { margin-top: 2.5rem; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-1-5 { gap: 0.375rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .space-y-1-5 > * + * { margin-top: 0.375rem; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+    .items-baseline { align-items: baseline; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .justify-end { justify-content: flex-end; }
+    .flex-1 { flex: 1; }
+    .flex-wrap { flex-wrap: wrap; }
+    .shrink-0 { flex-shrink: 0; }
+    .grid { display: grid; }
+    .grid-cols-7 { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+    .gap { gap: 0.25rem; }
+    .text-center { text-align: center; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-base { font-size: 1rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .text-xl { font-size: 1.25rem; }
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .tracking-tight { letter-spacing: -0.015em; }
+    .tracking-wide { letter-spacing: 0.05em; }
+    .tracking-wider { letter-spacing: 0.1em; }
+    .rounded { border-radius: 0.375rem; }
+    .rounded-lg { border-radius: 0.5rem; }
+    .rounded-md { border-radius: 0.375rem; }
+    .rounded-full { border-radius: 9999px; }
+    .rounded-t-md { border-radius: 0.375rem 0.375rem 0 0; }
+    .aspect-square { aspect-ratio: 1; }
+    .min-w-0 { min-width: 0; }
+    .truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .overflow-x-auto { overflow-x: auto; }
+    .pb-1 { padding-bottom: 0.25rem; }
+    .pb-2 { padding-bottom: 0.5rem; }
+    .p-1 { padding: 0.25rem; }
+    .p-1-5 { padding: 0.375rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-1-5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .py-2-5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+    .outline-none { outline: none; }
+    .relative { position: relative; }
+    .w-2 { width: 0.5rem; }
+    .h-2 { height: 0.5rem; }
+    .w-5 { width: 1.25rem; }
+    .h-5 { height: 1.25rem; }
+    .w-6 { width: 1.5rem; }
+    .h-6 { height: 1.5rem; }
+    
+    @media (min-width: 640px) {
+      .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .sm\:text-4xl { font-size: 2.25rem; }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+    
+    button:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    
+    input:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+  </style>
+  
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useMemo, useCallback } = React;
+    const { Plus, Trash2, ChevronLeft, ChevronRight, Flame, Award, TrendingUp, ListChecks, CalendarDays } = lucide;
+
+    const THEME = {
+      bg: '#141813',
+      surface: '#1C2117',
+      surface2: '#242B1E',
+      surface3: '#2C3524',
+      border: '#333D2B',
+      borderSoft: '#262E20',
+      text: '#EDE8DA',
+      textMuted: '#98A08A',
+      textFaint: '#5F6A55',
+      accent: '#C99A3B',
+      danger: '#B65C4A',
+    };
+
+    const PALETTE = [
+      { name: 'Amber', value: '#C99A3B' },
+      { name: 'Moss', value: '#7C9473' },
+      { name: 'Rust', value: '#B65C4A' },
+      { name: 'Slate', value: '#5C7A9C' },
+      { name: 'Plum', value: '#8B6F98' },
+      { name: 'Teal', value: '#4F8B85' },
+      { name: 'Berry', value: '#9C5B6B' },
+      { name: 'Olive', value: '#8C8A4E' },
+    ];
+
+    const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const pad = (n) => String(n).padStart(2, '0');
+    const toKey = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const startOfDay = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); return x; };
+    const fmtLong = (dateStr) => {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return new Date(y, m - 1, d).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+    };
+    const isLeap = (y) => (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+
+    function hexToRgba(hex, alpha) {
+      const h = hex.replace('#', '');
+      const r = parseInt(h.substring(0, 2), 16);
+      const g = parseInt(h.substring(2, 4), 16);
+      const b = parseInt(h.substring(4, 6), 16);
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+
+    function App() {
+      const [loaded, setLoaded] = useState(false);
+      const [habits, setHabits] = useState([]);
+      const [completions, setCompletions] = useState({});
+      const [view, setView] = useState('today');
+      const [selectedHabitId, setSelectedHabitId] = useState('all');
+      const [monthCursor, setMonthCursor] = useState(startOfDay(new Date()));
+      const [selectedDate, setSelectedDate] = useState(toKey(new Date()));
+      const [showAddForm, setShowAddForm] = useState(false);
+      const [newHabitName, setNewHabitName] = useState('');
+      const [newHabitColor, setNewHabitColor] = useState(PALETTE[0].value);
+      const [yearCursor, setYearCursor] = useState(new Date().getFullYear());
+      const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+
+      useEffect(() => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap';
+        document.head.appendChild(link);
+      }, []);
+
+      useEffect(() => {
+        (async () => {
+          try {
+            const data = localStorage.getItem('habit-data');
+            if (data) {
+              const parsed = JSON.parse(data);
+              setHabits(parsed.habits || []);
+              setCompletions(parsed.completions || {});
+            }
+          } catch (e) {}
+          finally {
+            setLoaded(true);
+          }
+        })();
+      }, []);
+
+      const persist = useCallback((h, c) => {
+        try {
+          localStorage.setItem('habit-data', JSON.stringify({ habits: h, completions: c }));
+        } catch (e) {
+          console.error('Could not save', e);
+        }
+      }, []);
+
+      const addHabit = () => {
+        const name = newHabitName.trim();
+        if (!name) return;
+        const habit = { id: `h${Date.now()}${Math.random().toString(36).slice(2, 7)}`, name, color: newHabitColor, createdAt: toKey(new Date()) };
+        const next = [...habits, habit];
+        setHabits(next);
+        persist(next, completions);
+        setNewHabitName('');
+        setNewHabitColor(PALETTE[(next.length) % PALETTE.length].value);
+        setShowAddForm(false);
+      };
+
+      const deleteHabit = (id) => {
+        const next = habits.filter((h) => h.id !== id);
+        const nextCompletions = { ...completions };
+        delete nextCompletions[id];
+        setHabits(next);
+        setCompletions(nextCompletions);
+        persist(next, nextCompletions);
+        if (selectedHabitId === id) setSelectedHabitId('all');
+        setConfirmDeleteId(null);
+      };
+
+      const toggleCompletion = (habitId, dateStr) => {
+        const map = { ...(completions[habitId] || {}) };
+        if (map[dateStr]) delete map[dateStr]; else map[dateStr] = true;
+        const next = { ...completions, [habitId]: map };
+        setCompletions(next);
+        persist(habits, next);
+      };
+
+      const getStreak = useCallback((habitId) => {
+        const map = completions[habitId] || {};
+        let d = startOfDay(new Date());
+        if (!map[toKey(d)]) d.setDate(d.getDate() - 1);
+        let streak = 0;
+        while (map[toKey(d)]) { streak++; d.setDate(d.getDate() - 1); }
+        return streak;
+      }, [completions]);
+
+      const getBestStreak = useCallback((habitId) => {
+        const map = completions[habitId] || {};
+        const dates = Object.keys(map).sort();
+        if (!dates.length) return 0;
+        let best = 1, cur = 1;
+        for (let i = 1; i < dates.length; i++) {
+          const diff = (new Date(dates[i]) - new Date(dates[i - 1])) / 86400000;
+          cur = diff === 1 ? cur + 1 : 1;
+          if (cur > best) best = cur;
+        }
+        return best;
+      }, [completions]);
+
+      const getRate = useCallback((habit) => {
+        const map = completions[habit.id] || {};
+        const created = new Date(habit.createdAt);
+        const today = startOfDay(new Date());
+        const totalDays = Math.max(1, Math.round((today - created) / 86400000) + 1);
+        return Math.round((Object.keys(map).length / totalDays) * 100);
+      }, [completions]);
+
+      const dayRatio = useCallback((dateStr) => {
+        const eligible = habits.filter((h) => h.createdAt <= dateStr);
+        if (!eligible.length) return null;
+        const done = eligible.filter((h) => completions[h.id]?.[dateStr]).length;
+        return done / eligible.length;
+      }, [habits, completions]);
+
+      const todayKey = toKey(new Date());
+      const todayDoneCount = habits.filter((h) => completions[h.id]?.[todayKey]).length;
+
+      const last30Consistency = useMemo(() => {
+        let sum = 0, count = 0;
+        for (let i = 0; i < 30; i++) {
+          const d = new Date(); d.setDate(d.getDate() - i);
+          const r = dayRatio(toKey(d));
+          if (r !== null) { sum += r; count++; }
+        }
+        return count ? Math.round((sum / count) * 100) : null;
+      }, [dayRatio]);
+
+      const monthMatrix = useMemo(() => {
+        const year = monthCursor.getFullYear();
+        const month = monthCursor.getMonth();
+        const startWeekday = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const cells = [];
+        for (let i = 0; i < startWeekday; i++) cells.push(null);
+        for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
+        while (cells.length % 7 !== 0) cells.push(null);
+        return cells;
+      }, [monthCursor]);
+
+      const yearWeeks = useMemo(() => {
+        const start = new Date(yearCursor, 0, 1);
+        const startPad = start.getDay();
+        const gridStart = new Date(start); gridStart.setDate(gridStart.getDate() - startPad);
+        const daysInYear = isLeap(yearCursor) ? 366 : 365;
+        const weeksCount = Math.ceil((startPad + daysInYear) / 7);
+        const weeks = [];
+        let cur = new Date(gridStart);
+        for (let w = 0; w < weeksCount; w++) {
+          const week = [];
+          for (let i = 0; i < 7; i++) { week.push(new Date(cur)); cur.setDate(cur.getDate() + 1); }
+          weeks.push(week);
+        }
+        return weeks;
+      }, [yearCursor]);
+
+      const cellColor = (date) => {
+        if (!date) return 'transparent';
+        const key = toKey(date);
+        if (selectedHabitId === 'all') {
+          const r = dayRatio(key);
+          if (r === null) return THEME.borderSoft;
+          if (r === 0) return THEME.borderSoft;
+          return hexToRgba(THEME.accent, 0.15 + r * 0.7);
+        }
+        const habit = habits.find((h) => h.id === selectedHabitId);
+        if (!habit || habit.createdAt > key) return THEME.borderSoft;
+        return completions[habit.id]?.[key] ? hexToRgba(habit.color, 0.85) : THEME.borderSoft;
+      };
+
+      const selectedDayHabits = habits.filter((h) => h.createdAt <= selectedDate);
+
+      if (!loaded) {
+        return (
+          <div style={{ background: THEME.bg, color: THEME.textMuted, fontFamily: "'Inter', sans-serif" }} className="w-full h-full min-h-screen flex items-center justify-center">
+            <p className="text-sm tracking-wide">Opening the ledger…</p>
+          </div>
+        );
+      }
+
+      return (
+        <div style={{ background: THEME.bg, color: THEME.text, fontFamily: "'Inter', sans-serif" }} className="w-full min-h-screen">
+          <div className="max-w-3xl mx-auto px-4 py-8 sm:px-6">
+
+            <header className="mb-8">
+              <div className="flex items-baseline justify-between gap-4">
+                <h1 style={{ fontFamily: "'Fraunces', serif", color: THEME.text }} className="text-3xl sm:text-4xl font-semibold tracking-tight">
+                  Fieldbook
+                </h1>
+                <span style={{ color: THEME.textFaint, fontFamily: "'IBM Plex Mono', monospace" }} className="text-xs">
+                  {new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                </span>
+              </div>
+              <p style={{ color: THEME.textMuted }} className="text-sm mt-1">A ledger for the habits you keep.</p>
+
+              <div className="flex gap-4 mt-5">
+                <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="flex-1 rounded-lg px-4 py-3">
+                  <p style={{ color: THEME.textFaint }} className="text-xs uppercase tracking-wider mb-1">Today</p>
+                  <p style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-xl font-medium">
+                    {todayDoneCount}<span style={{ color: THEME.textFaint }}>/{habits.length}</span>
+                  </p>
+                </div>
+                <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="flex-1 rounded-lg px-4 py-3">
+                  <p style={{ color: THEME.textFaint }} className="text-xs uppercase tracking-wider mb-1">Last 30 days</p>
+                  <p style={{ fontFamily: "'IBM Plex Mono', monospace" }} className="text-xl font-medium">
+                    {last30Consistency === null ? '—' : `${last30Consistency}%`}
+                  </p>
+                </div>
+              </div>
+            </header>
+
+            <nav className="flex gap-1 mb-6" style={{ borderBottom: `1px solid ${THEME.border}` }}>
+              {[
+                { id: 'today', label: 'Today', Icon: ListChecks },
+                { id: 'calendar', label: 'Calendar', Icon: CalendarDays },
+              ].map(({ id, label, Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setView(id)}
+                  className="flex items-center gap-1-5 px-3 py-2-5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 rounded-t-md"
+                  style={{
+                    color: view === id ? THEME.accent : THEME.textMuted,
+                    borderBottom: view === id ? `2px solid ${THEME.accent}` : '2px solid transparent',
+                    marginBottom: '-1px',
+                  }}
+                >
+                  <Icon size={15} /> {label}
+                </button>
+              ))}
+            </nav>
+
+            {view === 'today' && (
+              <section>
+                {habits.length === 0 && !showAddForm && (
+                  <div style={{ border: `1px dashed ${THEME.border}`, color: THEME.textMuted }} className="rounded-lg py-10 text-center text-sm">
+                    No entries yet. Start your first habit below.
+                  </div>
+                )}
+
+                <ul className="space-y-2 mb-4">
+                  {habits.map((h) => {
+                    const done = !!completions[h.id]?.[todayKey];
+                    const streak = getStreak(h.id);
+                    return (
+                      <li
+                        key={h.id}
+                        style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }}
+                        className="rounded-lg px-3 py-3 flex items-center gap-3"
+                      >
+                        <button
+                          onClick={() => toggleCompletion(h.id, todayKey)}
+                          aria-label={done ? `Mark ${h.name} not done` : `Mark ${h.name} done`}
+                          className="w-6 h-6 shrink-0 rounded-full flex items-center justify-center transition-all focus:outline-none focus-visible:ring-2"
+                          style={{
+                            border: `2px solid ${done ? h.color : THEME.border}`,
+                            background: done ? h.color : 'transparent',
+                          }}
+                        >
+                          {done && <span style={{ color: THEME.bg, fontSize: 12, fontWeight: 700 }}>✓</span>}
+                        </button>
+
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate" style={{ color: THEME.text }}>{h.name}</p>
+                          <div className="flex items-center gap-3 mt-0-5">
+                            <span style={{ color: THEME.textFaint, fontFamily: "'IBM Plex Mono', monospace" }} className="text-xs flex items-center gap-1">
+                              <Flame size={11} style={{ color: streak > 0 ? THEME.accent : THEME.textFaint }} /> {streak}
+                            </span>
+                            <span style={{ color: THEME.textFaint, fontFamily: "'IBM Plex Mono', monospace" }} className="text-xs flex items-center gap-1">
+                              <Award size={11} /> {getBestStreak(h.id)}
+                            </span>
+                            <span style={{ color: THEME.textFaint, fontFamily: "'IBM Plex Mono', monospace" }} className="text-xs flex items-center gap-1">
+                              <TrendingUp size={11} /> {getRate(h)}%
+                            </span>
+                          </div>
+                        </div>
+
+                        {confirmDeleteId === h.id ? (
+                          <div className="flex items-center gap-1-5 shrink-0">
+                            <button onClick={() => deleteHabit(h.id)} className="text-xs px-2 py-1 rounded focus:outline-none focus-visible:ring-2" style={{ background: THEME.danger, color: THEME.bg }}>Remove</button>
+                            <button onClick={() => setConfirmDeleteId(null)} className="text-xs px-2 py-1 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>Cancel</button>
+                          </div>
+                        ) : (
+                          <button onClick={() => setConfirmDeleteId(h.id)} className="shrink-0 p-1-5 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textFaint }} aria-label={`Delete ${h.name}`}>
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                {showAddForm ? (
+                  <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="rounded-lg p-3">
+                    <input
+                      autoFocus
+                      value={newHabitName}
+                      onChange={(e) => setNewHabitName(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') addHabit(); if (e.key === 'Escape') setShowAddForm(false); }}
+                      placeholder="Name a habit — e.g. Read 10 pages"
+                      style={{ background: THEME.surface2, border: `1px solid ${THEME.border}`, color: THEME.text }}
+                      className="w-full rounded-md px-3 py-2 text-sm mb-3 focus:outline-none focus-visible:ring-2"
+                    />
+                    <div className="flex items-center gap-2 mb-3 flex-wrap">
+                      {PALETTE.map((c) => (
+                        <button
+                          key={c.value}
+                          onClick={() => setNewHabitColor(c.value)}
+                          aria-label={c.name}
+                          className="w-6 h-6 rounded-full focus:outline-none focus-visible:ring-2"
+                          style={{ background: c.value, outline: newHabitColor === c.value ? `2px solid ${THEME.text}` : 'none', outlineOffset: '2px' }}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex gap-2 justify-end">
+                      <button onClick={() => setShowAddForm(false)} className="text-sm px-3 py-1-5 rounded-md focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>Cancel</button>
+                      <button onClick={addHabit} className="text-sm px-3 py-1-5 rounded-md font-medium focus:outline-none focus-visible:ring-2" style={{ background: THEME.accent, color: THEME.bg }}>Add habit</button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    className="w-full flex items-center justify-center gap-2 rounded-lg py-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2"
+                    style={{ border: `1px dashed ${THEME.border}`, color: THEME.textMuted }}
+                  >
+                    <Plus size={15} /> Add a habit
+                  </button>
+                )}
+              </section>
+            )}
+
+            {view === 'calendar' && (
+              <section>
+                {habits.length === 0 ? (
+                  <div style={{ border: `1px dashed ${THEME.border}`, color: THEME.textMuted }} className="rounded-lg py-10 text-center text-sm">
+                    Add a habit on the Today tab to start tracking consistency.
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex gap-2 mb-5 overflow-x-auto pb-1">
+                      <button
+                        onClick={() => setSelectedHabitId('all')}
+                        className="shrink-0 text-xs px-3 py-1-5 rounded-full font-medium focus:outline-none focus-visible:ring-2"
+                        style={{
+                          background: selectedHabitId === 'all' ? THEME.accent : THEME.surface,
+                          color: selectedHabitId === 'all' ? THEME.bg : THEME.textMuted,
+                          border: `1px solid ${selectedHabitId === 'all' ? THEME.accent : THEME.border}`,
+                        }}
+                      >
+                        All habits
+                      </button>
+                      {habits.map((h) => (
+                        <button
+                          key={h.id}
+                          onClick={() => setSelectedHabitId(h.id)}
+                          className="shrink-0 text-xs px-3 py-1-5 rounded-full font-medium flex items-center gap-1-5 focus:outline-none focus-visible:ring-2"
+                          style={{
+                            background: selectedHabitId === h.id ? hexToRgba(h.color, 0.25) : THEME.surface,
+                            color: selectedHabitId === h.id ? THEME.text : THEME.textMuted,
+                            border: `1px solid ${selectedHabitId === h.id ? h.color : THEME.border}`,
+                          }}
+                        >
+                          <span className="w-2 h-2 rounded-full" style={{ background: h.color }} />
+                          {h.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="rounded-lg p-4 mb-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <button onClick={() => setMonthCursor(new Date(monthCursor.getFullYear(), monthCursor.getMonth() - 1, 1))} className="p-1 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>
+                          <ChevronLeft size={16} />
+                        </button>
+                        <p style={{ fontFamily: "'Fraunces', serif" }} className="text-sm font-medium">
+                          {monthCursor.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
+                        </p>
+                        <button onClick={() => setMonthCursor(new Date(monthCursor.getFullYear(), monthCursor.getMonth() + 1, 1))} className="p-1 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1 mb-1">
+                        {WEEKDAY_LABELS.map((d, i) => (
+                          <div key={i} style={{ color: THEME.textFaint }} className="text-center text-xs tracking-wide">{d}</div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-7 gap-1">
+                        {monthMatrix.map((date, i) => {
+                          const key = date ? toKey(date) : null;
+                          const isToday = key === todayKey;
+                          const isSelected = key === selectedDate;
+                          return (
+                            <button
+                              key={i}
+                              disabled={!date}
+                              onClick={() => date && setSelectedDate(key)}
+                              className="aspect-square rounded-md flex items-center justify-center text-xs relative focus:outline-none focus-visible:ring-2"
+                              style={{
+                                background: date ? cellColor(date) : 'transparent',
+                                color: date ? THEME.text : 'transparent',
+                                border: isSelected ? `1.5px solid ${THEME.accent}` : isToday ? `1.5px solid ${THEME.textFaint}` : '1.5px solid transparent',
+                                fontFamily: "'IBM Plex Mono', monospace",
+                              }}
+                            >
+                              {date ? date.getDate() : ''}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-sm font-medium" style={{ color: THEME.text }}>{fmtLong(selectedDate)}</p>
+                        {selectedDate === todayKey && <span style={{ color: THEME.accent }} className="text-xs font-medium">Today</span>}
+                      </div>
+                      {selectedDayHabits.length === 0 ? (
+                        <p style={{ color: THEME.textFaint }} className="text-xs mt-2">No habits existed yet on this date.</p>
+                      ) : (
+                        <ul className="mt-3 space-y-1-5">
+                          {selectedDayHabits.map((h) => {
+                            const done = !!completions[h.id]?.[selectedDate];
+                            return (
+                              <li key={h.id} className="flex items-center justify-between">
+                                <span className="text-sm flex items-center gap-2" style={{ color: THEME.textMuted }}>
+                                  <span className="w-2 h-2 rounded-full" style={{ background: h.color }} /> {h.name}
+                                </span>
+                                <button
+                                  onClick={() => toggleCompletion(h.id, selectedDate)}
+                                  className="w-5 h-5 rounded-full flex items-center justify-center focus:outline-none focus-visible:ring-2"
+                                  style={{ border: `2px solid ${done ? h.color : THEME.border}`, background: done ? h.color : 'transparent' }}
+                                >
+                                  {done && <span style={{ color: THEME.bg, fontSize: 10, fontWeight: 700 }}>✓</span>}
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </div>
+
+                    <div style={{ background: THEME.surface, border: `1px solid ${THEME.border}` }} className="rounded-lg p-4 mt-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <button onClick={() => setYearCursor(yearCursor - 1)} className="p-1 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>
+                          <ChevronLeft size={16} />
+                        </button>
+                        <p style={{ fontFamily: "'Fraunces', serif" }} className="text-sm font-medium">{yearCursor} in review</p>
+                        <button onClick={() => setYearCursor(yearCursor + 1)} className="p-1 rounded focus:outline-none focus-visible:ring-2" style={{ color: THEME.textMuted }}>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                      <div className="overflow-x-auto pb-2">
+                        <div className="flex gap-[3px]" style={{ minWidth: `${yearWeeks.length * 13}px` }}>
+                          {yearWeeks.map((week, wi) => (
+                            <div key={wi} className="flex flex-col gap-[3px]">
+                              {week.map((date, di) => {
+                                const inYear = date.getFullYear() === yearCursor;
+                                return (
+                                  <div
+                                    key={di}
+                                    title={inYear ? toKey(date) : ''}
+                                    className="w-[10px] h-[10px] rounded-[2px]"
+                                    style={{ background: inYear ? cellColor(date) : 'transparent' }}
+                                  />
+                                );
+                              })}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </section>
+            )}
+
+            <footer className="mt-10 text-center">
+              <span style={{ color: THEME.textFaint }} className="text-xs">
+                {habits.length} habit{habits.length === 1 ? '' : 's'} logged, saved to your device.
+              </span>
+            </footer>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
